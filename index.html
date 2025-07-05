@@ -1,0 +1,53 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BloxcraftMC Free Hosting</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: sans-serif; background: #0d1117; color: #c9d1d9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .container { background: #161b22; padding: 2em; border-radius: 1em; box-shadow: 0 0 20px rgba(0,0,0,0.3); width: 100%; max-width: 400px; text-align: center; }
+    input, select, button { width: 100%; padding: 0.8em; margin: 0.5em 0; border: none; border-radius: 0.5em; font-size: 1em; }
+    button { background: #238636; color: white; cursor: pointer; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>BloxcraftMC Free Minecraft Hosting</h1>
+    <form id="createForm">
+      <input type="text" id="servername" placeholder="Server Name" required>
+      <select id="version">
+        <option value="1.20.4">1.20.4</option>
+        <option value="1.21">1.21</option>
+      </select>
+      <button type="submit">Create Server</button>
+    </form>
+    <div id="result" class="hidden">
+      <h2>Server Created!</h2>
+      <p><strong>IP:</strong> <span id="ip"></span></p>
+      <p><strong>Port:</strong> <span id="port"></span></p>
+      <p><strong>Status:</strong> <span id="status">Starting...</span></p>
+    </div>
+  </div>
+  <script>
+    document.getElementById('createForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const servername = document.getElementById('servername').value;
+      const version = document.getElementById('version').value;
+
+      const res = await fetch('http://YOUR_BACKEND_IP:3000/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ servername, version })
+      });
+      const data = await res.json();
+      document.getElementById('ip').textContent = data.ip;
+      document.getElementById('port').textContent = data.port;
+      document.getElementById('result').classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
